@@ -1,0 +1,15 @@
+POST http://127.0.0.1:5000/todo/buy-grains
+Content-Type: application/json
+
+//{
+//    "name" : "buy books"
+//}
+
+###
+GET http://127.0.0.1:5000/todos
+Accept: application/json
+
+###
+
+DELETE http://127.0.0.1:5000/todo/buy-bread
+Content-Type: application/json
