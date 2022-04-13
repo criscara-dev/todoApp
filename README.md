@@ -4,8 +4,22 @@
   - create requests file: requests.http
   - my way to implement REST in Flank:
     - import Flask-RESTful package
+  - create app full-stack in memory list:
+    - convert GET, POST and DELETE methods via `SQLAlchemy` to get Objects from a real DB, create a Model
+    - import Flask-SQLAlchemy and Flask-Migrate
+    ```python
+    app.config['SECRET_KEY'] = 'mysecretkey'
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+os.path.join(basedir, 'data.sqlite')
+    app.config['SQLACHEMY_TRACK_MODIFICATIONS'] = False
+    ```
+    - create and import a Model
+    - register a model using a migration `flask db init` and then run `flask db migrate "first migration"` it will add the sqlite file;  and finally `flask db upgrade`
 - protect Rest API with OKTA Access token/Bearer token
-- create app full-stack in memory list
+  - secure API initially with JWT token... then add OKTA one;
+  - authentication page -> username+password -> key -> key+request call -> etc.
+    - install Flask-JWT-extended and basic usage code in app.py with imports
+    - finally add decorator to API calls to protect API with Authentication @jwt_required
 - switch list db to sqlite db
 - vanilla frontend
 - add OKTA sign-in

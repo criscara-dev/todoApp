@@ -1,4 +1,18 @@
-POST http://127.0.0.1:5000/todo/buy-grains
+#GET http://127.0.0.1:5000/protected
+#Accept: application/json
+#Authorization: Bearer <JWT>
+#
+####
+#POST http://127.0.0.1:5000/login
+#Content-Type: application/json
+#
+#{
+#"username":"test",
+#"password":"test"
+#}
+
+###
+POST http://127.0.0.1:5000/api/v1/todo/buy-milk
 Content-Type: application/json
 
 //{
@@ -6,10 +20,14 @@ Content-Type: application/json
 //}
 
 ###
-GET http://127.0.0.1:5000/todos
-Accept: application/json
+
+DELETE http://127.0.0.1:5000/api/v1/todo/buy-books
+Content-Type: application/json
+
 
 ###
+GET http://127.0.0.1:5000/api/v1/todos
+Accept: application/json
 
-DELETE http://127.0.0.1:5000/todo/buy-bread
-Content-Type: application/json
+
+
