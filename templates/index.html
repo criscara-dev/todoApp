@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To Do App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <!-- Latest CDN production JavaScript and CSS -->
+    <script src="https://global.oktacdn.com/okta-signin-widget/6.1.2/js/okta-sign-in.min.js" type="text/javascript"></script>
+    <link href="https://global.oktacdn.com/okta-signin-widget/6.1.2/css/okta-sign-in.min.css" type="text/css" rel="stylesheet"/>
+</head>
+<style>
+    li > button > a {
+        color:white
+    }
+</style>
+<body>
+<div class="ui container">
+      <nav class="ui menu">
+        <a class="item" href="/" title="Home">Home</a>
+        {% if not g.user %}
+          <a class="item" href="/login">Log In / Register</a>
+        {% else %}
+          <a class="item" href="/userprofile">Profile</a>
+          <a class="item" href="/logout">Logout</a>
+        {% endif %}
+      </nav>
+    </div>
+
+    <div id='todo-container' class="ui container">
+        <h1 class="ui center aligned header">To Do App</h1>
+        {% if g.user %}
+        <h2>Welcome, {{ g.user.profile.firstName }} </h2>
+
+    <form class="ui form" id="form" action="{{ url_for('add') }}" method="post">
+        <div class="required field">
+        <label for="item">Add to do:</label>
+            <input autofocus autocomplete="off" type="text" name="todoitem" id="" required>
+        </div>
+            <br>
+        <input class="ui blue button" type="submit" value="Add todo">
+    </form>
+    <br>
+    <div class="ui segment">
+    <div id="app">
+        <ul class="ui relaxed divided list">
+            {% for todo in todos %}
+            <li class="ui item eight wide column" >{{ todo.name }} <button class="ui red button mini four wide column" type='button' id='delete'><a class="white" href="/api/v1/todo/delete/{{ todo.name }}">Delete</a></button></li><br/>
+        {%  endfor %}
+        </ul>
+    </div>
+    </div>
+    {% else %}
+        <h2 class="ui center aligned header">Please signin to use the App</h2>
+        {% endif %}
+    </div>
+</body>
+</html>

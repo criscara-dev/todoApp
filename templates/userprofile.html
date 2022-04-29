@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To Do App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <!-- Latest CDN production JavaScript and CSS -->
+    <script src="https://global.oktacdn.com/okta-signin-widget/6.1.2/js/okta-sign-in.min.js" type="text/javascript"></script>
+    <link href="https://global.oktacdn.com/okta-signin-widget/6.1.2/css/okta-sign-in.min.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<div class="ui container">
+      <nav class="ui menu">
+        <a class="item" href="/" title="Home">Home</a>
+        {% if not g.user %}
+          <a class="item" href="/login">Log In / Register</a>
+        {% else %}
+          <a class="item" href="/userprofile">Profile</a>
+          <a class="item" href="/logout">Logout</a>
+        {% endif %}
+      </nav>
+    </div>
+
+    <div class="ui container">
+      <div class="ui center aligned header">
+        <h1 class="ui center aligned header">Your Profile</h1>
+          <br>
+
+      <p>login ID: {{ g.user.profile.login }} </p>
+      <p>Account status: {{ g.user.status }}</p>
+      <p>Last logged in: {{ g.user.lastLogin }}</p>
+
+      </p>
+      </div>
+    </div>
+</body>
+</html>

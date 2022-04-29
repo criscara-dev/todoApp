@@ -1,42 +1,86 @@
-# To do App in Flask with Okta
+# To do App 
 
-- create a to-do CRUD Rest (Representation State Transfer) API
-  - create requests file: requests.http
-  - my way to implement REST in Flank:
-    - import Flask-RESTful package
-  - create app full-stack in memory list:
-    - convert GET, POST and DELETE methods via `SQLAlchemy` to get Objects from a real DB, create a Model
-    - import Flask-SQLAlchemy and Flask-Migrate
-    ```python
-    app.config['SECRET_KEY'] = 'mysecretkey'
-    basedir = os.path.abspath(os.path.dirname(__file__))
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+os.path.join(basedir, 'data.sqlite')
-    app.config['SQLACHEMY_TRACK_MODIFICATIONS'] = False
-    ```
-    - create and import a Model
-    - register a model using a migration `flask db init` and then run `flask db migrate "first migration"` it will add the sqlite file;  and finally `flask db upgrade`
-- protect Rest API with OKTA Access token/Bearer token
-  - secure API initially with JWT token... then add OKTA one;
-  - authentication page -> username+password -> key -> key+request call -> etc.
-    - install Flask-JWT-extended and basic usage code in app.py with imports
-    - finally add decorator to API calls to protect API with Authentication @jwt_required
-- switch list db to sqlite db
-- vanilla frontend
-- add OKTA sign-in
+---
 
-## How to run the App
+## Getting Started 🚀
 
 
+### Description 📄
+The application let you add and delete tasks from a data store inplemented in SQLite.
+The server-side application has been integrated with Okta for authentication and tokens.
+The REST API endpoints are protected via Okta decorator so, only available for users that have OIDC.
 
-## Signin users:
-[Redirect authentication](https://developer.okta.com/docs/guides/sign-into-web-app-redirect/asp-net-core-3/main/)
+### Technologies used 🛠
+Flask web framework for Python
+SQLite DBMS
+Flask OpenIDConnect
+Okta SDK for Python
 
-## Task to complete
-- adding DB support
-- [Protect your API endpoints](https://developer.okta.com/docs/guides/protect-your-api/aspnetcore3/main/)
-- [Implement the OAuth 2.0 Authorization Code with PKCE Flow](https://developer.okta.com/blog/2019/08/22/okta-authjs-pkce)
+P.S.
+I choose not to use the package for Flask WTF forms since I just have a simple form with 1 field.
 
-## References:
+### How To Setup the Project 🔧
 
-[Build a Simple CRUD App with Flask and Python](https://developer.okta.com/blog/2018/07/23/build-a-simple-crud-app-with-flask-and-python)
+- Install the requirements.txt via the CLI command: `pip install -r requirements.txt`
+- To create the DB file (and to have the DB ready for changes in the Schema), run:
+```python
+flask db init
+flask db migrate -m 'first migration'
+flask db upgrade
+```
+- Get an Authorization token from an Identity and secure Access Management platform:
+  - Sign-up to a developer account at Okta
+  - Create an OIDC - OpenID Connect app
+  - Get the Authorization token.
+  - Create a new file named `client_secrets.json`  in the root of your project folder and insert the following code:
+```python
+{
+  "web": {
+    "client_id": "{{ OKTA_CLIENT_ID }}",
+    "client_secret": "{{ OKTA_CLIENT_SECRET }}",
+    "auth_uri": "{{ OKTA_ORG_URL }}/oauth2/default/v1/authorize",
+    "token_uri": "{{ OKTA_ORG_URL }}/oauth2/default/v1/token",
+    "issuer": "{{ OKTA_ORG_URL }}/oauth2/default",
+    "userinfo_uri": "{{ OKTA_ORG_URL }}/oauth2/default/userinfo",
+    "redirect_uris": [
+      "http://localhost:5000/oidc/callback"
+    ]
+  }
+}       
+```
+- replace the placeholder variables with your actual Okta information.
+- In the `app.py` file, replace the placeholder variables with your Okta details:
+```python
+app.config["OIDC_CLIENT_SECRETS"] = "client_secrets.json"
+app.config["OIDC_COOKIE_SECURE"] = False
+app.config["OIDC_CALLBACK_ROUTE"] = "/oidc/callback"
+app.config["OIDC_SCOPES"] = ["openid", "email", "profile"]
+app.config["SECRET_KEY"] = "{{ LONG_RANDOM_STRING }}"
+app.config["OIDC_ID_TOKEN_COOKIE_NAME"] = "oidc_token"
+oidc = OpenIDConnect(app)
+okta_client = UsersClient("{{ OKTA_ORG_URL }}", "{{ OKTA_AUTH_TOKEN }}")
+```
+---
 
+### How To Run the Project 🎬
+
+- On your Terminal CLI run:
+```shell
+export FLASK_APP=app.py
+export FLASK_ENV=development
+flask run
+# Running on http://127.0.0.1:5000/
+```
+---
+
+## License 📄
+
+This project is licensed under the MIT License - see the [LICENSE.md](https://choosealicense.com/licenses/mit/) file for details.
+
+---
+
+## Credits/References 🎁
+
+- [Redirect authentication](https://developer.okta.com/docs/guides/sign-into-web-app-redirect/asp-net-core-3/main/)
+- [Build a Simple CRUD App with Flask and Python](https://developer.okta.com/blog/2018/07/23/build-a-simple-crud-app-with-flask-and-python)
+- [4-Python Flask - Okta Identity & Access Management by Paul Mahon](https://www.youtube.com/watch?v=A1u0iOakQpk&t=430s)
